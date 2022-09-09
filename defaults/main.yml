@@ -1,22 +1,18 @@
 ---
-## Packages
-percona_repo_baseurl: "https://repo.percona.com/yum"
-percona_repo_release: "percona-release-latest"
-percona_version: 57
-percona_packages:
-  - "Percona-Server-server-{{ percona_version }}"
-  - "Percona-Server-devel-{{ percona_version }}"
-  - "Percona-Server-client-{{ percona_version }}"
-  - "percona-xtrabackup"
+## Percona enable mysql at startup
+percona_enabled_on_startup: true
 
-## Percona mysql daemon
-percona_mysql_daemon: mysqld
+## Percona root user/password
+percona_set_root_password: true
+percona_root_user: "root"
+percona_root_password: "S3cr3tS/$"
 
-## Percona default database
-percona_default_db_enabled: true
-percona_default_db_name: "senato_database"
-percona_default_db_user: "senato"
-percona_default_db_password: "ch4ng3m3/*"
+## Percona database settings
+percona_db_enabled: false
+percona_db_name: "default_db"
+percona_db_user: "default_user"
+percona_db_password: "Ch4ng3m3/*"
+percona_db_host: "localhost"
 
 ## Configuration
 # This variable specifies the server ID. 
@@ -24,20 +20,11 @@ percona_default_db_password: "ch4ng3m3/*"
 # server_id is set to 0 by default
 mysql_server_id: ""
 
-# Mysql Server Socket. Change at your need. Leave blank for mysql default value
-mysql_socket: "/var/lib/mysql/mysql.sock"
-
 # Datafile directory.
 mysql_datadir: "/var/lib/mysql"
 
 # Address on which mysql bind to
 mysql_bind_address: "127.0.0.1"
-
-# Otherwise, the destination is a file and the log_error value is the file name.
-mysql_log_error: "/var/log/mysqld.log"
-
-# The path name of the process ID (PID) file.
-mysql_pid_file: "/var/run/mysqld/mysqld.pid"
 
 # Mysql symbolic links configuration
 mysql_symbolic_links: 0
