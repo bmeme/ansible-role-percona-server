@@ -1,0 +1,18 @@
+image: europe-docker.pkg.dev/bmeme-infrastructure/bmeme-docker-registry/bmeme/gke-deployer:3.2.0
+
+stages:
+  - build
+
+build:
+  stage: build
+  services:
+    - docker:19-dind
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_HOST: tcp://localhost:2375
+  before_script:
+    - pip3 install molecule[docker] yamllint
+    - export PATH=/root/.local/bin:${PATH}
+  script:
+    - molecule test

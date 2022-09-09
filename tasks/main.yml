@@ -1,0 +1,55 @@
+---
+- name: Prerequisites tasks
+  ansible.builtin.include_tasks: prerequisites.yml
+  tags:
+    - percona_prepare
+    - percona_install
+
+- name: Repositories tasks
+  ansible.builtin.include_tasks: repositories.yml
+  tags:
+    - percona_prepare
+    - percona_install
+
+- name: Installation tasks
+  ansible.builtin.include_tasks: install.yml
+  tags:
+    - percona_install
+
+- name: Configuration tasks
+  ansible.builtin.include_tasks: configure.yml
+  tags:
+    - percona_configure_first_run
+    - percona_first_run
+
+- name: Start service
+  ansible.builtin.service:
+    name: mysqld
+    state: started
+    enabled: true
+  tags:
+    - percona_first_run
+
+- name: Waiting Mysql daemon is started up
+  ansible.builtin.pause:
+    seconds: 10
+  tags:
+    - percona_first_run
+
+- name: Set root password
+  ansible.builtin.include_tasks: password.yml
+  tags:
+    - percona_first_run
+    - percona_new_password
+
+- name: Create database
+  ansible.builtin.include_tasks: database.yml
+  when: percona_default_db_enabled | default(false) | bool
+  tags:
+    - percona_first_run
+    - percona_default_database
+
+- name: Restart Mysql
+  ansible.builtin.service:
+    name: mysqld
+    state: restarted

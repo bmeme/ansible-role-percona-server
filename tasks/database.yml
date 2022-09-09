@@ -1,0 +1,12 @@
+---
+- name: Create application database
+  community.mysql.mysql_db:
+    name: "{{ percona_default_db_name }}"
+    state: present
+
+- name: Create application database user
+  community.mysql.mysql_user:
+    name: "{{ percona_default_db_user }}"
+    password: "{{ percona_default_db_password }}"
+    host: "%"
+    priv: "{{ percona_default_db_name }}.*:ALL,GRANT"

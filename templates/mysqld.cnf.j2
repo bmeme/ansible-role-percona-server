@@ -1,0 +1,19 @@
+# {{ ansible_managed }}
+[client]
+socket={{ mysql_socket }}
+
+[mysqld]
+datadir={{ mysql_datadir }}
+socket={{ mysql_socket }}
+bind_address={{ mysql_bind_address }}
+
+{% if mysql_server_id %}
+# Percona server ID
+server-id={{ mysql_server_id }}
+{% endif %}
+
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links={{ mysql_symbolic_links }}
+
+log-error={{ mysql_log_error }}
+pid-file={{ mysql_pid_file }}

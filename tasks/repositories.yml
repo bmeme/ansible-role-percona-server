@@ -1,0 +1,5 @@
+---
+- name: Ensure Percona repositories are installed
+  package:
+    name: "{{ percona_repo_baseurl }}/{{ percona_repo_release }}.noarch.rpm"
+    state: present

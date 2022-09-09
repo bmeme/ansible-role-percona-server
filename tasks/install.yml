@@ -1,0 +1,6 @@
+---
+- name: Ensure Percona is installed.
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: installed
+  with_items: "{{ percona_packages }}"

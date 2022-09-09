@@ -1,0 +1,11 @@
+---
+- name: Ensure Percona required packages are correctly installed
+  ansible.builtin.package:
+    name: "{{ packages }}"
+    state: present
+    releasever: 7
+  vars:
+    packages:
+      - initscripts
+      - MySQL-python
+      - rsync

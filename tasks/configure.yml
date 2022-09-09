@@ -1,0 +1,29 @@
+---
+- name: Check if Percona configuration directory is correctly loaded
+  ansible.builtin.lineinfile:
+    name: "/etc/my.cnf"
+    line: "!includedir /etc/percona-server.conf.d/"
+    state: present
+  check_mode: true
+  register: includedir
+
+- name: Load Percona configuration directory
+  ansible.builtin.lineinfile:
+    name: "/etc/my.cnf"
+    line: "!includedir /etc/percona-server.conf.d/"
+  when: includedir.changed
+
+- name: Configure mysqld.cnf
+  ansible.builtin.template:
+    src: templates/mysqld.cnf.j2
+    dest: /etc/percona-server.conf.d/mysqld.cnf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Append extended configuration
+  ansible.builtin.blockinfile:
+    path: /etc/percona-server.conf.d/mysqld.cnf
+    block: "{{ mysql_server_configuration }}"
+  when: mysql_server_configuration | default(false) | bool
+  notify: restart mysql

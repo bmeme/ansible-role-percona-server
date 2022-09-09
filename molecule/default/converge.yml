@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+
+  vars_files:
+    - converge-vars.yml
+
+  roles:
+    - { role: senato.percona }
