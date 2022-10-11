@@ -30,7 +30,7 @@
 
 - name: Define percona_mysql_daemon.
   ansible.builtin.set_fact:
-    mysql_daemon: "{{ __percona_mysql_daemon }}"
+    percona_mysql_daemon: "{{ __percona_mysql_daemon }}"
   when: percona_mysql_daemon is not defined
 
 - name: Define mysql_log_error.

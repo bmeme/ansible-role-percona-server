@@ -22,8 +22,15 @@ lint: |
   set -e
   yamllint .
 platforms:
-  - name: instance
-    image: "geerlingguy/docker-${MOLECULE_DISTRO:-centos7}-ansible:latest"
+  - name: centos7
+    image: "bmeme/docker-ansible-centos:7"
+    command: "/usr/sbin/init"
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
+  - name: ubuntu2004
+    image: "bmeme/docker-ansible-ubuntu:20.04"
     command: "/usr/sbin/init"
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro

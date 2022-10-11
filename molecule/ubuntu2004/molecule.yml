@@ -22,8 +22,8 @@ lint: |
   set -e
   yamllint .
 platforms:
-  - name: instance
-    image: "geerlingguy/docker-${MOLECULE_DISTRO:-ubuntu2004}-ansible:latest"
+  - name: ubuntu2004
+    image: "bmeme/docker-ansible-ubuntu:20.04"
     command: "/usr/sbin/init"
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
