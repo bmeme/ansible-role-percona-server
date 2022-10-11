@@ -1,0 +1,21 @@
+---
+- name: Ensure required packages are installed
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: installed
+  with_items: 
+    - MySQL-python
+    - perl-DBD-MySQL
+  register: rh_percona_install_required_packages
+
+- name: Ensure Percona repositories are installed
+  ansible.builtin.package:
+    name: "{{ percona_repo_baseurl }}/{{ percona_repo_release }}.noarch.rpm"
+    state: present
+
+- name: Ensure Percona packages are installed.
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: installed
+  with_items: "{{ percona_packages }}"
+  register: rh_percona_install_required_packages

@@ -9,21 +9,27 @@
 
 - name: Load Percona configuration directory
   ansible.builtin.lineinfile:
-    name: "/etc/my.cnf"
-    line: "!includedir /etc/percona-server.conf.d/"
-  when: includedir.changed
+    name: "{{ mysql_config_file }}"
+    line: "!includedir {{ mysql_config_include_dir }}/"
 
 - name: Configure mysqld.cnf
   ansible.builtin.template:
     src: templates/mysqld.cnf.j2
-    dest: /etc/percona-server.conf.d/mysqld.cnf
+    dest: "{{ mysql_config_include_dir }}/mysqld.cnf"
     owner: root
     group: root
     mode: 0644
+  notify: restart percona
 
 - name: Append extended configuration
   ansible.builtin.blockinfile:
-    path: /etc/percona-server.conf.d/mysqld.cnf
+    path: "{{ mysql_config_include_dir }}/mysqld.cnf"
     block: "{{ mysql_server_configuration }}"
   when: mysql_server_configuration | default(false) | bool
-  notify: restart mysql
+
+- name: Ensure MySQL is started and enabled on boot.
+  ansible.builtin.service:
+    name: "{{ percona_mysql_daemon }}" 
+    state: started 
+    enabled: "{{ percona_enabled_on_startup }}"
+  register: mysql_service_configuration

@@ -1,55 +1,42 @@
 ---
-- name: Prerequisites tasks
-  ansible.builtin.include_tasks: prerequisites.yml
+- name: Variables configuration
+  ansible.builtin.include_tasks: variables.yml
+  tags:
+    - percona_variables
+    - percona_prepare
+
+- name: Setup/install tasks (RedHat)
+  ansible.builtin.include_tasks: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
   tags:
     - percona_prepare
     - percona_install
 
-- name: Repositories tasks
-  ansible.builtin.include_tasks: repositories.yml
+- name: Setup/install tasks (Debian)
+  ansible.builtin.include_tasks: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
   tags:
     - percona_prepare
     - percona_install
 
-- name: Installation tasks
-  ansible.builtin.include_tasks: install.yml
-  tags:
-    - percona_install
+- name: Check if MySQL packages were installed.
+  set_fact:
+    mysql_install_packages: "{{ (rh_percona_install_required_packages is defined and rh_percona_install_required_packages.changed)
+      or (deb_mysql_install_packages is defined and deb_mysql_install_packages.changed) }}"
 
-- name: Configuration tasks
-  ansible.builtin.include_tasks: configure.yml
-  tags:
-    - percona_configure_first_run
-    - percona_first_run
+# - name: Configuration tasks
+#   ansible.builtin.include_tasks: configure.yml
+#   tags:
+#     - percona_first_run
 
-- name: Start service
-  ansible.builtin.service:
-    name: mysqld
-    state: started
-    enabled: true
-  tags:
-    - percona_first_run
+# - name: Set root password
+#   ansible.builtin.include_tasks: password.yml
+#   when: percona_set_root_password | default(false) | bool
+#   tags:
+#     - percona_new_password
 
-- name: Waiting Mysql daemon is started up
-  ansible.builtin.pause:
-    seconds: 10
-  tags:
-    - percona_first_run
-
-- name: Set root password
-  ansible.builtin.include_tasks: password.yml
-  tags:
-    - percona_first_run
-    - percona_new_password
-
-- name: Create database
-  ansible.builtin.include_tasks: database.yml
-  when: percona_default_db_enabled | default(false) | bool
-  tags:
-    - percona_first_run
-    - percona_default_database
-
-- name: Restart Mysql
-  ansible.builtin.service:
-    name: mysqld
-    state: restarted
+# - name: Create database
+#   ansible.builtin.include_tasks: database.yml
+#   when: percona_db_enabled | default(false) | bool
+#   tags:
+#     - percona_default_database
