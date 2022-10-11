@@ -2,8 +2,3 @@
 ## Percona database settings
 percona_db_enabled: true
 percona_set_root_password: true
-percona_packages:
-  - "Percona-Server-server-{{ percona_version }}"
-  - "Percona-Server-devel-{{ percona_version }}"
-  - "Percona-Server-client-{{ percona_version }}"
-  - "percona-xtrabackup"

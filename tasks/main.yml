@@ -24,19 +24,29 @@
     mysql_install_packages: "{{ (rh_percona_install_required_packages is defined and rh_percona_install_required_packages.changed)
       or (deb_mysql_install_packages is defined and deb_mysql_install_packages.changed) }}"
 
-# - name: Configuration tasks
-#   ansible.builtin.include_tasks: configure.yml
-#   tags:
-#     - percona_first_run
+- name: Configuration tasks
+  ansible.builtin.include_tasks: configure.yml
+  tags:
+    - percona_first_run
 
-# - name: Set root password
-#   ansible.builtin.include_tasks: password.yml
-#   when: percona_set_root_password | default(false) | bool
-#   tags:
-#     - percona_new_password
+- name: Set root password (RedHat)
+  ansible.builtin.include_tasks: password-RedHat.yml
+  when: 
+      - ansible_os_family == 'RedHat'
+      - percona_set_root_password | default(false) | bool
+  tags:
+    - percona_new_password
 
-# - name: Create database
-#   ansible.builtin.include_tasks: database.yml
-#   when: percona_db_enabled | default(false) | bool
-#   tags:
-#     - percona_default_database
+- name: Set root password (Debian)
+  ansible.builtin.include_tasks: password-Debian.yml
+  when: 
+      - ansible_os_family == 'Debian'
+      - percona_set_root_password | default(false) | bool
+  tags:
+    - percona_new_password
+
+- name: Create database
+  ansible.builtin.include_tasks: database.yml
+  when: percona_db_enabled | default(false) | bool
+  tags:
+    - percona_default_database

@@ -2,6 +2,9 @@
 - name: Create application database
   community.mysql.mysql_db:
     name: "{{ percona_db_name }}"
+    login_user: "{{ percona_root_user }}"
+    login_password: "{{ percona_root_password }}"
+    login_unix_socket: "{{ mysql_socket }}"
     state: present
 
 - name: Create application database user
@@ -10,3 +13,6 @@
     password: "{{ percona_db_password }}"
     host: "%"
     priv: "{{ percona_db_name }}.*:ALL,GRANT"
+    login_user: "{{ percona_root_user }}"
+    login_password: "{{ percona_root_password }}"
+    login_unix_socket: "{{ mysql_socket }}"

@@ -1,4 +1,0 @@
----
-## Percona database settings
-percona_db_enabled: true
-percona_set_root_password: true

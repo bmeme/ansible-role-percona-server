@@ -29,13 +29,6 @@ platforms:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     privileged: true
     pre_build_image: true
-  - name: ubuntu2004
-    image: "bmeme/docker-ansible-ubuntu:20.04"
-    command: "/usr/sbin/init"
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
-    pre_build_image: true
 provisioner:
   name: ansible
   log: true

@@ -5,6 +5,7 @@
     update_cache: yes
   with_items: 
     - gnupg2
+    - python3-mysqldb
   register: deb_percona_install_required_packages
 
 - name: Calculate Debian lsb_release
