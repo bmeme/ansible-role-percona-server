@@ -20,6 +20,11 @@
   ansible.builtin.apt:
     deb: "{{ percona_repo_baseurl }}/{{ percona_repo_release }}.{{ lsb_release.stdout }}_all.deb"
 
+- name: Setup Percona release
+  ansible.builtin.shell: |
+    bash | set -o pipefail
+    bash | percona-release setup ps{{ percona_version }}
+
 - name: Ensure Percona packages are installed
   ansible.builtin.apt:
     name: "{{ item }}"

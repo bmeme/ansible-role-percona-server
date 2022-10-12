@@ -13,6 +13,11 @@
     name: "{{ percona_repo_baseurl }}/{{ percona_repo_release }}.noarch.rpm"
     state: present
 
+- name: Setup Percona release
+  ansible.builtin.shell: |
+    set -o pipefail
+    percona-release setup ps{{ percona_version }}
+
 - name: Ensure Percona packages are installed.
   ansible.builtin.package:
     name: "{{ item }}"

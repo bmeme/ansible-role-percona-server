@@ -6,4 +6,3 @@ percona_packages:
   - "Percona-Server-server-{{ percona_version }}"
   - "Percona-Server-devel-{{ percona_version }}"
   - "Percona-Server-client-{{ percona_version }}"
-  - "percona-xtrabackup"
