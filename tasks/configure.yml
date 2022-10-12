@@ -1,17 +1,14 @@
 ---
-- name: Check if Percona configuration directory is correctly loaded
-  ansible.builtin.lineinfile:
-    name: "{{ mysql_config_file }}"
-    line: "!includedir {{ mysql_config_include_dir }}/"
-    state: present
-  check_mode: true
-  register: includedir
+- name: "Create include directory {{ mysql_config_include_dir }} if it does not exist"
+  ansible.builtin.file:
+    path: "{{ mysql_config_include_dir }}"
+    state: directory
+    mode: '0755'
 
 - name: Load Percona configuration directory
   ansible.builtin.lineinfile:
     name: "{{ mysql_config_file }}"
-    line: "!includedir {{ mysql_config_include_dir }}/"
-  when: not includedir.changed | default(true) | bool
+    line: "!includedir {{ mysql_config_include_dir }}"
 
 - name: Configure mysqld.cnf
   ansible.builtin.template:
@@ -34,3 +31,4 @@
     state: started 
     enabled: "{{ percona_enabled_on_startup }}"
   register: mysql_service_configuration
+  ignore_errors: true
