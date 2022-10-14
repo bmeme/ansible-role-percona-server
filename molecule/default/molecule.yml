@@ -22,7 +22,7 @@ lint: |
   set -e
   yamllint .
 platforms:
-  - name: instance
+  - name: default
     image: "bmeme/docker-ansible-${MOLECULE_DISTRO:-centos:7}"
     command: "/usr/sbin/init"
     volumes:
