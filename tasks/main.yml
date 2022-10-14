@@ -20,7 +20,7 @@
     - percona_install
 
 - name: Check if MySQL packages were installed.
-  set_fact:
+  ansible.builtin.set_fact:
     mysql_install_packages: "{{ (rh_percona_install_required_packages is defined and rh_percona_install_required_packages.changed)
       or (deb_mysql_install_packages is defined and deb_mysql_install_packages.changed) }}"
 

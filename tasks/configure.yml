@@ -1,5 +1,5 @@
 ---
-- name: "Create include directory {{ mysql_config_include_dir }} if it does not exist"
+- name: "Create include directory {{ mysql_config_include_dir }}"
   ansible.builtin.file:
     path: "{{ mysql_config_include_dir }}"
     state: directory
@@ -17,7 +17,7 @@
     owner: root
     group: root
     mode: 0644
-  notify: restart percona
+  notify: Restart percona
 
 - name: Append extended configuration
   ansible.builtin.blockinfile:
