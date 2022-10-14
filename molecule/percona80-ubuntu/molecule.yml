@@ -22,7 +22,7 @@ lint: |
   set -e
   yamllint .
 platforms:
-  - name: ubuntu2004
+  - name: percona80-ubuntu
     image: "bmeme/docker-ansible-ubuntu:20.04"
     command: "/usr/sbin/init"
     volumes:

@@ -3,20 +3,25 @@
   ansible.builtin.package:
     name: "{{ item }}"
     state: installed
-  with_items: 
-    - MySQL-python
-    - perl-DBD-MySQL
+  with_items: "{{ percona_required_packages }}"
   register: rh_percona_install_required_packages
 
 - name: Ensure Percona repositories are installed
   ansible.builtin.package:
     name: "{{ percona_repo_baseurl }}/{{ percona_repo_release }}.noarch.rpm"
     state: present
+    disable_gpg_check: true
 
 - name: Setup Percona release
-  ansible.builtin.shell: |
-    set -o pipefail
-    percona-release setup ps{{ percona_version }}
+  ansible.builtin.command: percona-release setup ps{{ percona_version }}
+  changed_when: false
+
+- name: Disable mysql module (RedHat >= 8)
+  ansible.builtin.command: dnf module disable mysql -y
+  changed_when: false
+  when: 
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version | int >= 8
 
 - name: Ensure Percona packages are installed.
   ansible.builtin.package:

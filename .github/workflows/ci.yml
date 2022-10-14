@@ -39,8 +39,9 @@ jobs:
     strategy:
       matrix:
         distro:
-          - centos:7
+          - centos:7.9
           - ubuntu:20.04
+          - ol:8.6
 
     steps:
       - name: Check out the codebase.

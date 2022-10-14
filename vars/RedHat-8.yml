@@ -4,7 +4,7 @@ __percona_repo_release: "percona-release-latest"
 __percona_version: "57"
 __percona_mysql_daemon: mysqld
 __percona_required_packages:
-  - "MySQL-python"
+  - "python3-PyMySQL"
   - "perl-DBD-MySQL"
 __percona_packages_57:
   - "Percona-Server-server-{{ percona_version }}"
