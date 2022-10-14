@@ -56,21 +56,21 @@
   when: mysql_log_error is not defined
 
 - name: Define mysql_pid_file.
-  set_fact:
+  ansible.builtin.set_fact:
     mysql_pid_file: "{{ __mysql_pid_file }}"
   when: mysql_pid_file is not defined
 
 - name: Define mysql_config_file.
-  set_fact:
+  ansible.builtin.set_fact:
     mysql_config_file: "{{ __mysql_config_file }}"
   when: mysql_config_file is not defined
 
 - name: Define mysql_config_include_dir.
-  set_fact:
+  ansible.builtin.set_fact:
     mysql_config_include_dir: "{{ __mysql_config_include_dir }}"
   when: mysql_config_include_dir is not defined
 
 - name: Define mysql_socket.
-  set_fact:
+  ansible.builtin.set_fact:
     mysql_socket: "{{ __mysql_socket }}"
   when: mysql_socket is not defined

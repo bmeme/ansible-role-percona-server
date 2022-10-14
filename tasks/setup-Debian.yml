@@ -19,9 +19,8 @@
     deb: "{{ percona_repo_baseurl }}/{{ percona_repo_release }}.{{ lsb_release.stdout }}_all.deb"
 
 - name: Setup Percona release
-  ansible.builtin.shell: |
-    bash | set -o pipefail
-    bash | percona-release setup ps{{ percona_version }}
+  ansible.builtin.shell: >
+    percona-release setup ps{{ percona_version }}
   changed_when: false
   failed_when: false
 
