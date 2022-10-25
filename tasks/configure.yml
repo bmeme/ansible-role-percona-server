@@ -23,7 +23,9 @@
   ansible.builtin.blockinfile:
     path: "{{ mysql_config_include_dir }}/mysqld.cnf"
     block: "{{ mysql_server_configuration }}"
-  when: mysql_server_configuration | default(false) | bool
+  when: 
+    - mysql_server_configuration is defined
+    - mysql_server_configuration | length > 0
 
 - name: Ensure MySQL is started and enabled on boot.
   ansible.builtin.service:
