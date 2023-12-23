@@ -1,3 +1,6 @@
 ---
 - name: Restart percona
-  ansible.builtin.service: "name={{ percona_mysql_daemon }} state=restarted sleep=5"
+  ansible.builtin.service: 
+    name: "{{ percona_mysql_daemon }}"
+    state: restarted 
+    sleep: 5

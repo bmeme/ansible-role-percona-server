@@ -3,7 +3,7 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
-Installs and configures Percona MySQL server on RHEL/CentOS 7 and Ubuntu 20.4 (at the moment).
+Installs and configures Percona MySQL server on EL 8/9 and Ubuntu 20.4/22.04.
 
 ## Requirements
 No special requirements; note that this role requires root access, so either run it in a playbook with a global `become: yes`, or invoke the role in your playbook like:
@@ -92,10 +92,12 @@ mysql_server_configuration: |-
 This role allows you to install both `5.7` and `8.0` version of Percona Mysql Server. Choose software version using `percona_version` variable. Default at `57`. 
 
 ## Supported Linux distro and versions
-- EL 7 (RedHat, CentOs)
+- EL 8
+- EL 9
 - Ubuntu 20.04
+- Ubuntu 22.04
 
-More versions will be supported in the future.
+EL 7 is no longer officially supported. As far as we know, the role can currently continue to work properly on EL 7.9; however, we're uncertain whether it works on lower versions.
 
 ## Dependencies
 N/A
@@ -115,10 +117,10 @@ N/A
     percona_version: "80" # To install Percona Mysql Server 8
 
 ## License
-MIT / BSD
+MIT
 
 ## Author Information
-This role was created in 2022 by [Bmeme](https://www.bmeme.com). It is actually maintained by [Daniele Piaggesi](https://github.com/g0blin79), [Roberto Mariani](https://github.com/jean-louis) and [Michele Mondelli](https://github.com/Mithenks)
+This role was created in 2022 by [Bmeme](https://www.bmeme.com). It is actually maintained by [Daniele Piaggesi](https://github.com/g0blin79) and [Roberto Mariani](https://github.com/jean-louis).
 
 ## Credits
 This role was really inspired by [geerligguy Ansible Role Mysql](https://github.com/geerlingguy/ansible-role-mysql).

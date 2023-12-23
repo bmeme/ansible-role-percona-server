@@ -16,12 +16,12 @@
   ansible.builtin.command: percona-release setup ps{{ percona_version }}
   changed_when: false
 
-- name: Disable mysql module (RedHat >= 8)
+- name: Disable mysql module (RedHat 8)
   ansible.builtin.command: dnf module disable mysql -y
   changed_when: false
   when: 
     - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version | int >= 8
+    - ansible_distribution_major_version | int == 8
 
 - name: Ensure Percona packages are installed.
   ansible.builtin.package:
