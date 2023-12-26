@@ -1,0 +1,21 @@
+---
+__percona_repo_baseurl: "https://repo.percona.com/apt"
+__percona_repo_release: "percona-release_latest"
+__percona_version: "57"
+__percona_mysql_daemon: mysql
+__percona_required_packages:
+  - gnupg2
+  - python3-mysqldb
+__percona_packages_57:
+  - "percona-server-server-5.7"
+  - "percona-server-common-5.7"
+  - "percona-server-client-5.7"
+__percona_packages_80:
+  - "percona-server-server"
+  - "percona-server-common"
+  - "percona-server-client"
+__mysql_log_error: "/var/log/mysql/mysqld.log"
+__mysql_pid_file: "/var/run/mysqld/mysql.pid"
+__mysql_config_file: /etc/mysql/my.cnf
+__mysql_config_include_dir: /etc/mysql/percona-server.conf.d/
+__mysql_socket: /var/lib/mysql/mysql.sock

@@ -47,6 +47,8 @@
 
 - name: Create database
   ansible.builtin.include_tasks: database.yml
-  when: percona_db_enabled | default(false) | bool
+  when: 
+    - percona_db_enabled | default(false) | bool
+    - percona_set_root_password | default(false) | bool
   tags:
     - percona_default_database

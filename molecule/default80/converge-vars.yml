@@ -1,5 +1,5 @@
 ---
 ## Percona database settings
-percona_db_enabled: false
+percona_db_enabled: true
 percona_set_root_password: false
 percona_version: "80"
