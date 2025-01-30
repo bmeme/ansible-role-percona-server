@@ -17,27 +17,29 @@ jobs:
         uses: ansible/ansible-lint@main
 
   test:
-    name: Testing ansible role bmeme.percona_server
-    runs-on: ubuntu-latest
+    name: Testing bmeme.percona_server role 8.x and 9.x Ansible version
+    runs-on: ubuntu-24.04
     needs: [lint]
     strategy:
       matrix:
-        scenario:
-          - "default"
-          - "default80"
-        distro: 
-          - "rockylinux:8.7-2.11"
-          - "rockylinux:8.8-2.11"
-          - "rockylinux:8.9-2.11"
-          - "rockylinux:9.3-2.15"
-          - "ubuntu:20.04-2.11"
-          - "ubuntu:20.04-2.13"
-          - "ubuntu:22.04-2.13"
-          - "ubuntu:22.04-2.17"
+        ansible:
+          - "8.7.0"
+          - "9.13.0"
+        distro:
+          - "rockylinux:8.10-2.15"
+          - "rockylinux:9.4-2.15"
+          - "rockylinux:9.4-2.16"
+          - "ubuntu:22.04-2.15"
+          - "ubuntu:22.04-2.16"
     steps:
       - 
         name: Check out the codebase.
         uses: actions/checkout@v3
+      -
+        name: Set up Python 3.
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
       -
         # See: https://github.com/geerlingguy/ansible-role-mysql/issues/422
         name: Disable AppArmor
@@ -48,12 +50,11 @@ jobs:
           sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.mysqld
         if: startsWith(matrix.distro, 'ubuntu')
       -
-        name: Molecule test
-        uses: gofrolist/molecule-action@v2
-        with:
-          molecule_options: --debug
-          molecule_args: -d docker --scenario-name ${{ matrix.scenario }}
-          molecule_command: test
+        name: Install requirements
+        run: pip install ansible==${{ matrix.ansible }} molecule molecule-plugins[docker]
+      -
+        name: Run Molecule test
+        run: molecule test -d docker --all
         env:
           ANSIBLE_FORCE_COLOR: '1'
           MOLECULE_DISTRO: ${{ matrix.distro }}
