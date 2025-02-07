@@ -23,6 +23,13 @@
     - ansible_os_family == 'RedHat'
     - ansible_distribution_major_version | int == 8
 
+- name: Disable mariadb module (RedHat 9)
+  ansible.builtin.command: dnf module disable mariadb -y
+  changed_when: false
+  when: 
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version | int == 9
+
 - name: Ensure Percona packages are installed.
   ansible.builtin.package:
     name: "{{ item }}"
