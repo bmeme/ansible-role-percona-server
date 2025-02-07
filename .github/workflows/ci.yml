@@ -2,6 +2,13 @@
 name: Ansible Role Percona MySQL Server
 'on':
   push:
+    branches:
+      - '*'
+      - '*/*'
+      - '**'
+      - "!main"
+  schedule:
+    - cron: 00 02 */7 * *
 
 jobs:
 
