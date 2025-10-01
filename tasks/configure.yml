@@ -27,6 +27,20 @@
     - mysql_server_configuration is defined
     - mysql_server_configuration | length > 0
 
+- name: Touch a /var/run/mysqld/mysqld.pid file
+  ansible.builtin.file:
+    path: /var/run/mysqld/mysqld.pid
+    state: touch
+    mode: u=rw,g=r,o=r
+    owner: mysql
+    group: mysql
+
+- name: Inizialize MySQL for first installation
+  command: >
+    mysqld --initialize --user=mysql --datadir={{ mysql_datadir }}
+  args:
+    creates: "{{ mysql_datadir }}/mysql"
+
 - name: Ensure MySQL is started and enabled on boot.
   ansible.builtin.service:
     name: "{{ percona_mysql_daemon }}" 
