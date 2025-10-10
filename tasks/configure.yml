@@ -36,7 +36,7 @@
     group: mysql
 
 - name: Inizialize MySQL for first installation
-  command: >
+  ansible.builtin.command: >
     mysqld --initialize --user=mysql --datadir={{ mysql_datadir }}
   args:
     creates: "{{ mysql_datadir }}/mysql"
