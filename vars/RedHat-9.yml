@@ -6,10 +6,6 @@ __percona_mysql_daemon: mysqld
 __percona_required_packages:
   - "python3-PyMySQL"
   - "perl-DBD-MySQL"
-__percona_packages_57:
-  - "Percona-Server-server-{{ percona_version }}"
-  - "Percona-Server-devel-{{ percona_version }}"
-  - "Percona-Server-client-{{ percona_version }}"
 __percona_packages_80:
   - "percona-server-server"
   - "percona-server-devel"

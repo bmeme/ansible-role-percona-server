@@ -3,10 +3,19 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
-Installs and configures Percona MySQL server on EL 8/9 and Ubuntu 20.4/22.04.
+Installs and configures Percona MySQL Server on Enterprise Linux and Ubuntu systems.
+
+| Role Series | Percona Server version | Supported OS | Python | Ansible | Status |
+|-------------|------------------------|--------------|--------|---------|--------|
+|1.x|5.7/8.0|EL 7 / 8 · Ubuntu 20.04 / 22.04|3.6–3.9|<2.15|_Legacy_ (EOL for Percona 5.7)|
+|2.x|8.x only|EL 9 · Ubuntu 24.04 (noble)|3.10 / 3.11|>2.15|_Current / Maintained_
+
+> Version 2.x drops support for Percona 5.7 and older platforms. EL 9 and Ubuntu 24.04 (noble) are the only supported targets. Python 3.10 / 3.11 are required on the controller.
 
 ## Requirements
-No special requirements; note that this role requires root access, so either run it in a playbook with a global `become: yes`, or invoke the role in your playbook like:
+No special requirements.
+
+This role must run with root privileges, so either set a global `become: yes` or call it as:
 
 ```yaml
 - hosts: database
@@ -16,23 +25,26 @@ No special requirements; note that this role requires root access, so either run
 ```
 
 ## Installation
-This is an Ansible role distributed using Ansible Galaxy. In order to install this role you can use the following command.
+```shell
+ansible-galaxy install bmeme.percona_server
+```
 
-`$ ansible-galaxy install bmeme.percona_server`
-
-## Update
-If you want to update the role, you need to pass --force parameter when installing. Please, check the following command:
-
-`$ ansible-galaxy install --force bmeme.percona_server`
+To update an existing installation:
+```shell
+ansible-galaxy install --force bmeme.percona_server
+```
 
 ## Role Variables
-Global variables are:
+
+### General
 
 ```yaml
 ## Percona enable mysql at startup
 percona_enabled_on_startup: true
 ```
-Enable Percona MySQL Server daemon at boot. Default at `true`
+Enable the Percona MySQL Server service at boot. Default:`true`
+
+### Root account
 
 ```yaml
 ## Percona root user/password 
@@ -40,7 +52,9 @@ percona_set_root_password: true
 percona_root_user: "root"
 percona_root_password: "S3cr3tS/$"
 ```
-Update root password during the role execution. This role will only change root user password when MySQL is configured. This could be particularly useful in EL environments, where at first run a random password is created and stored in the logfile. Default at `true`.
+Change the root password during role execution (useful on EL where a random password is initially generated).
+
+### Optional database creation
 
 ```yaml
 ## Percona database settings
@@ -50,7 +64,7 @@ percona_db_user: "default_user"
 percona_db_password: "Ch4ng3m3/*"
 percona_db_host: "localhost"
 ```
-Create a database during the role execution. Default at `false`
+### Base configuration
 
 ```yaml
 # This variable specifies the server ID. 
@@ -67,7 +81,7 @@ mysql_bind_address: "127.0.0.1"
 # Mysql symbolic links configuration
 mysql_symbolic_links: 0
 ```
-Basic Mysqld configuration. 
+### Extra mysqld settings
 
 ```yaml
 # All specific configuration items
@@ -78,9 +92,9 @@ Basic Mysqld configuration.
 #
 mysql_server_configuration: ""
 ```
-This allows to add custom configuration to `mysqld.conf` file, stored in `/etc/percona-server.conf.d` (RedHat) or `/etc/mysql/percona-server.conf.d` (Ubuntu) directory. Uncomment `mysql_server_configuration` line and add `mysqld` configuration items exactly as if you were putting them in `mysqld.conf` file.
+These options are appended to the mysqld.cnf inside the Percona configuration include directory (/etc/percona-server.conf.d on EL, /etc/mysql/percona-server.conf.d on Ubuntu).
 
-Here an example of advanced configurations:
+Example:
 
 ```yaml
 mysql_server_configuration: |-
@@ -88,19 +102,21 @@ mysql_server_configuration: |-
   some_other_conf=some_other_value
 ```
 
-## How to set Percona Mysql Server version to install
-This role allows you to install both `5.7` and `8.0` version of Percona Mysql Server. Choose software version using `percona_version` variable. Default at `57`. 
+## How to select Percona Server version
+Role 1.x supported both `5.7` and `8.0` through the variable:
+```yaml
+percona_version: "80" # or "57"
+```
+Role 2.x installs only Percona Server 8.x, so the variable is no longer required.
 
-## Supported Linux distro and versions
-- EL 8
-- EL 9
-- Ubuntu 20.04
-- Ubuntu 22.04
+## Supported Platforms
+- EL 9 (Rocky Linux 9 / Alma Linux 9 / RHEL 9)
+- Ubuntu 24.04 LTS (noble)
 
-EL 7 is no longer officially supported. As far as we know, the role can currently continue to work properly on EL 7.9; however, we're uncertain whether it works on lower versions.
+Older releases (EL 7/8, Ubuntu 20.04/22.04) are supported only by the 1.x role branch.
 
 ## Dependencies
-N/A
+None
 
 ## Example Playbook
     - hosts: db-servers
@@ -110,7 +126,7 @@ N/A
       roles:
         - { role: bmeme.percona_server }
 
-*Inside `vars/main.yml`*:
+Example vars/main.yml:
 
     percona_db_enabled: true
     percona_set_root_password: true
@@ -123,4 +139,4 @@ MIT
 This role was created in 2022 by [Bmeme](https://www.bmeme.com). It is actually maintained by [Daniele Piaggesi](https://github.com/g0blin79) and [Roberto Mariani](https://github.com/jean-louis).
 
 ## Credits
-This role was really inspired by [geerligguy Ansible Role Mysql](https://github.com/geerlingguy/ansible-role-mysql).
+Inspired by [geerligguy Ansible Role Mysql](https://github.com/geerlingguy/ansible-role-mysql).

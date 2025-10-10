@@ -26,14 +26,10 @@ jobs:
     strategy:
       matrix:
         ansible:
-          - "8.7.0"
-          - "9.13.0"
+          - "2.17"
         distro:
-          - "rockylinux:8.10-2.15"
           - "rockylinux:9.4-2.15"
-          - "rockylinux:9.4-2.16"
-          - "ubuntu:22.04-2.15"
-          - "ubuntu:22.04-2.16"
+          - "ubuntu:24.04-2.17"
     steps:
       - 
         name: Check out the codebase.
@@ -54,7 +50,7 @@ jobs:
         if: startsWith(matrix.distro, 'ubuntu')
       -
         name: Install requirements
-        run: pip install ansible==${{ matrix.ansible }} molecule molecule-plugins[docker]
+        run: pip install ansible-core==${{ matrix.ansible }} molecule molecule-plugins docker
       -
         name: Run Molecule test
         run: molecule test -d docker --all
