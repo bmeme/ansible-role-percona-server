@@ -40,6 +40,9 @@
     mysqld --initialize --user=mysql --datadir={{ mysql_datadir }}
   args:
     creates: "{{ mysql_datadir }}/mysql"
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version | int >= 9
 
 - name: Ensure MySQL is started and enabled on boot.
   ansible.builtin.service:

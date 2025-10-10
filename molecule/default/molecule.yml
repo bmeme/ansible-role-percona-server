@@ -22,7 +22,7 @@ driver:
   name: docker
 platforms:
   - name: default
-    image: "bmeme/docker-ansible-${MOLECULE_DISTRO:-rockylinux:9.4-2.15}"
+    image: "bmeme/docker-ansible-${MOLECULE_DISTRO:-rockylinux:8.9-2.11}"
     command: "/usr/sbin/init"
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
@@ -31,6 +31,10 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
+  inventory:
+    host_vars:
+      localhost:
+        ansible_python_interpreter: "{{ ansible_playbook_python }}"
   log: true
   lint:
     name: ansible-lint
