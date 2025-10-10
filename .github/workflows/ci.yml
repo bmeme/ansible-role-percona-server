@@ -4,6 +4,7 @@ name: Ansible Role Percona MySQL Server
   push:
     branches-ignore:
       - main
+  workflow_dispatch:
 
 jobs:
 
