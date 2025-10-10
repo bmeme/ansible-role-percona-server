@@ -4,8 +4,6 @@ name: Ansible Role Percona MySQL Server
   push:
     branches-ignore:
       - main
-  schedule:
-    - cron: 00 02 */7 * *
 
 jobs:
 
