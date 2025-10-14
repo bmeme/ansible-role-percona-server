@@ -31,13 +31,6 @@
   when: 
     - percona_required_packages is not defined
 
-- name: Define percona_packages 57.
-  ansible.builtin.set_fact:
-    percona_packages: "{{ __percona_packages_57 | list }}"
-  when: 
-    - percona_packages is not defined
-    - percona_version == "57"
-
 - name: Define percona_packages 80.
   ansible.builtin.set_fact:
     percona_packages: "{{ __percona_packages_80 | list }}"

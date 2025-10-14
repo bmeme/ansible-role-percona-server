@@ -5,10 +5,14 @@
     state: directory
     mode: '0755'
 
-- name: Load Percona configuration directory
+- name: Ensure '!includedir ...' is present exactly once
   ansible.builtin.lineinfile:
-    name: "{{ mysql_config_file }}"
+    path: "{{ mysql_config_file }}"
+    regexp: '^\s*!includedir\s+{{ mysql_config_include_dir | regex_escape }}\s*$'
     line: "!includedir {{ mysql_config_include_dir }}"
+    state: present
+    insertafter: EOF
+    create: no
 
 - name: Configure mysqld.cnf
   ansible.builtin.template:
@@ -26,6 +30,27 @@
   when: 
     - mysql_server_configuration is defined
     - mysql_server_configuration | length > 0
+
+- name: Check if MySQL service is active (via systemd module)
+  ansible.builtin.systemd:
+    name: "{{ percona_mysql_daemon }}"
+  register: mysql_service_state
+  changed_when: false
+  failed_when: false
+
+- name: Remove stale MySQL PID when service is stopped
+  ansible.builtin.file:
+    path: "{{ mysql_pid_file | default('/run/mysqld/mysqld.pid') }}"
+    state: absent
+  when: (mysql_service_state.status.ActiveState | default('inactive')) != 'active'
+
+- name: Inizialize MySQL for first installation (RHEL 9+)
+  ansible.builtin.command: >
+    mysqld --initialize --user=mysql --datadir={{ mysql_datadir }}
+  args:
+    creates: "{{ mysql_datadir }}/mysql"
+  when:
+    - ansible_os_family == 'RedHat'
 
 - name: Ensure MySQL is started and enabled on boot.
   ansible.builtin.service:
