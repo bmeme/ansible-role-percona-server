@@ -16,6 +16,10 @@
   ansible.builtin.command: percona-release setup ps{{ percona_version }}
   changed_when: false
 
+- name: Ensure Percona PXB repository is enabled
+  ansible.builtin.command: "percona-release enable pxb-{{ percona_version }}"
+  changed_when: false
+
 - name: Disable mariadb module (RedHat 9)
   ansible.builtin.command: dnf module disable mariadb -y
   changed_when: false

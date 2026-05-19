@@ -6,4 +6,4 @@
     - converge-vars.yml
 
   roles:
-    - { role: bmeme.percona_server }
+    - role: bmeme.percona_server

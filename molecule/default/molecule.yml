@@ -14,7 +14,10 @@ scenario:
     - cleanup
     - destroy
 dependency:
-  name: galaxy
+  name: shell
+  command: |
+    mkdir -p "${MOLECULE_PROJECT_DIRECTORY}/.ansible/roles"
+    ln -sfn "${MOLECULE_PROJECT_DIRECTORY}" "${MOLECULE_PROJECT_DIRECTORY}/.ansible/roles/bmeme.percona_server"
 driver:
   name: docker
 platforms:
@@ -29,7 +32,7 @@ platforms:
 provisioner:
   name: ansible
   env:
-    ANSIBLE_ROLES_PATH: "${MOLECULE_PROJECT_DIRECTORY}:${HOME}/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles"
+    ANSIBLE_ROLES_PATH: "${MOLECULE_PROJECT_DIRECTORY}/.ansible/roles:${HOME}/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles"
   inventory:
     host_vars:
       localhost:
